@@ -6,30 +6,55 @@ import sys
 import os
 import webbrowser
 import time
+import socket
 from threading import Timer
 
+def get_local_ip():
+    """Get the local IP address"""
+    try:
+        # Connect to a dummy address to get local IP
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        local_ip = s.getsockname()[0]
+        s.close()
+        return local_ip
+    except:
+        return "Unable to detect"
+
 def print_welcome():
+    local_ip = get_local_ip()
+    
     print("🚀 Career & Skills Advisor Web Application")
-    print("=" * 60)
+    print("=" * 70)
     print("🎆 Modern Interactive Career Assessment Tool")
-    print("=" * 60)
+    print("=" * 70)
     print()
     print("✨ Features:")
     print("  🎯 Multi-step interactive assessment")
     print("  📊 Visual results with charts and timelines")
     print("  📚 Curated learning resources")
     print("  📱 Mobile-friendly responsive design")
+    print("  🌐 Network accessible from any device")
     print()
-    print("💻 Server starting at: http://localhost:5000")
+    print("💻 Access URLs:")
+    print(f"  📍 Local:        http://localhost:5000")
+    print(f"  📍 This Computer: http://127.0.0.1:5000")
+    print(f"  📱 Network:      http://{local_ip}:5000")
+    print()
+    print("📱 For Mobile/Other Devices:")
+    print(f"  • Connect to same WiFi network")
+    print(f"  • Open browser and go to: http://{local_ip}:5000")
+    print(f"  • Works on phones, tablets, laptops, etc.")
     print()
     print("💡 Instructions:")
-    print("  1. Wait for 'Running on http://127.0.0.1:5000' message")
+    print("  1. Wait for 'Running on http://0.0.0.0:5000' message")
     print("  2. Your browser will open automatically")
-    print("  3. Fill out the career assessment form")
-    print("  4. Get your personalized career guidance!")
+    print("  3. Share the network URL with other devices")
+    print("  4. Fill out the career assessment form")
+    print("  5. Get your personalized career guidance!")
     print()
     print("  🛱 Press Ctrl+C to stop the server")
-    print("=" * 60)
+    print("=" * 70)
     print()
 
 def open_browser():
@@ -52,8 +77,9 @@ def main():
         Timer(1.0, open_browser).start()
         
         # Run the Flask application
-        print("🔄 Starting Flask server...")
-        app.run(debug=True, host='127.0.0.1', port=5000, use_reloader=False)
+        print("🔄 Starting Flask server for network access...")
+        print(f"🌐 Server will be accessible from any device on your network!")
+        app.run(debug=True, host='0.0.0.0', port=5000, use_reloader=False)
         
     except ImportError as e:
         print(f"❌ Import Error: {e}")
